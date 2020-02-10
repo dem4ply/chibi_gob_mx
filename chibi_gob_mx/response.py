@@ -1,5 +1,6 @@
 import copy
 
+from chibi.atlas import Atlas
 from chibi.chain import Chibi_chain
 from chibi.metaphors import Book
 from chibi.metaphors.book import End_book
@@ -14,7 +15,7 @@ class Catalog( Response ):
         except AttributeError:
             from chibi_gob_mx.chibi_gob_mx import catalog
             native = super().native
-            results = native.results
+            results = Atlas( native.results )
             page = copy.copy( self.pagination )
             try:
                 page.next()

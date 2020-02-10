@@ -3,6 +3,7 @@
 import unittest
 
 from chibi_gob_mx import catalog
+from chibi.atlas import Chibi_atlas
 
 
 class Test_catalog(unittest.TestCase):
@@ -23,5 +24,14 @@ class Test_catalog(unittest.TestCase):
         self.assertEqual( response.status_code, 200  )
         keys = set()
         for n in response.native:
-            self.assertIsInstance( n, dict )
-            keys |= set( n.keys() )
+            self.assertIsInstance( n, Chibi_atlas )
+            if 'variables' in n:
+                v = set( n.variables )
+                for a in v:
+                    if 'latitud' in a:
+                        import pdb
+                        pdb.set_trace()
+                keys |= v
+
+        for k in sorted( keys ):
+            print( k )
