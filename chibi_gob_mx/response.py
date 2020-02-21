@@ -6,8 +6,12 @@ from chibi.metaphors import Book
 from chibi.metaphors.book import End_book
 from chibi_requests import Response
 
+from .serializers import Catalog as Catalog_serializer
+
 
 class Catalog( Response ):
+    serializer = Catalog_serializer
+
     @property
     def native( self ):
         try:
@@ -15,7 +19,7 @@ class Catalog( Response ):
         except AttributeError:
             from chibi_gob_mx.chibi_gob_mx import catalog
             native = super().native
-            results = Atlas( native.results )
+            results = Atlas( native )
             page = copy.copy( self.pagination )
             try:
                 page.next()
@@ -34,7 +38,7 @@ class Catalog( Response ):
         try:
             return self._pagination
         except AttributeError:
-            native = super().native
+            native = self.parse_content_type()
             page = native.pagination
             page = Book(
                 total_elements=page.total, page_size=page.pageSize,
@@ -43,3 +47,7 @@ class Catalog( Response ):
 
             self._pagination = page
             return self._pagination
+
+    @property
+    def native_is_many( self ):
+        return True

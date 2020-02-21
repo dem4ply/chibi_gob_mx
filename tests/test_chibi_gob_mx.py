@@ -19,6 +19,17 @@ class Test_catalog(unittest.TestCase):
         self.assertEqual(
             len( total_elements ), response.pagination.total_elements )
 
+    def test_should_have_the_expected_keys( self ):
+        response = catalog.get()
+        self.assertEqual( response.status_code, 200  )
+        for n in response.native:
+            self.assertIn( 'id', n )
+            self.assertIn( 'count', n )
+            self.assertIn( 'endpoint', n )
+            self.assertIn( 'origin_url', n )
+            self.assertIn( 'fields', n )
+
+
     def test_all_the_elements_should_be_dict( self ):
         response = catalog.get()
         self.assertEqual( response.status_code, 200  )
@@ -27,11 +38,13 @@ class Test_catalog(unittest.TestCase):
             self.assertIsInstance( n, Chibi_atlas )
             if 'variables' in n:
                 v = set( n.variables )
+                """
                 for a in v:
                     if 'latitud' in a:
                         import pdb
                         pdb.set_trace()
+                """
                 keys |= v
 
-        for k in sorted( keys ):
-            print( k )
+        #for k in sorted( keys ):
+            #print( k )
